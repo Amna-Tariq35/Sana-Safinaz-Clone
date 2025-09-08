@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart</title>
+    <style>
+    /* General Body Styling */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+}
+
+/* Container Styling */
+.container {
+    max-width: 1000px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Wishlist Layout */
+.wishlist-layout {
+    display: flex;
+    justify-content: center;
+}
+
+/* Wishlist Section Styling */
+.wishlist-section {
+    width: 100%;
+}
+
+/* Header */
+.wishlist-header {
+    font-size: 26px;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+/* Empty Wishlist Message */
+.empty-message {
+    text-align: center;
+    font-size: 18px;
+    color: #777;
+    margin-top: 20px;
+}
+
+/* Wishlist Item Styling */
+.wishlist-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: #f7f7f7;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.wishlist-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Product Image */
+.wishlist-item img {
+    width: 80px;
+    height: 120px;
+    border-radius: 8px;
+    object-fit: cover;
+    margin-right: 20px;
+}
+
+/* Product Details */
+.wishlist-item-details {
+    flex: 1;
+}
+
+.wishlist-item-details h4 {
+    font-size: 18px;
+    margin: 0;
+    color: #333;
+}
+
+.wishlist-item-details p {
+    margin: 5px 0 0;
+    color: #777;
+    font-size: 14px;
+}
+
+/* Wishlist Actions */
+.wishlist-actions {
+    display: flex;
+    align-items: center;
+}
+
+.delete-icon {
+    font-size: 20px;
+    color: #ff4d4f;
+    cursor: pointer;
+    transition: color 0.2s, transform 0.2s;
+}
+
+.delete-icon:hover {
+    color: #d90429;
+    transform: scale(1.2);
+}
+
+
+    </style>
+    <!-- <link rel="stylesheet" href="/css/cart-style.css"> -->
+
+</head>
+<body>
+    <div class="container">
+        <!-- Wishlist Section -->
+        <div class="wishlist-layout">
+            <div class="wishlist-section">
+                <div class="wishlist-header">YOUR WISHLIST</div>
+                <% if (products.length === 0) { %>
+                    <p class="empty-message">Your wishlist is empty.</p>
+                <% } else { %>
+                    <% products.forEach(item => { %>
+                        <!-- Wishlist Item -->
+                        <div class="wishlist-item" data-id="<%= item.id %>">
+                            <img src="<%= item.image %>" alt="Product Image">
+                            <div class="wishlist-item-details">
+                                <h4><%= item.title %></h4>
+                                <p>Price: Rs<%= item.price %></p>
+                            </div>
+                            <div class="wishlist-actions">
+                                <i class="delete-icon" data-id="<%= item.id %>">🗑️</i>
+                            </div>
+                        </div>
+                    <% }); %>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</body>
+
+        
+    <!-- <script>
+        // Handle quantity increase/decrease and delete actions
+        document.addEventListener("click", function (e) {
+            // Get the product ID from the dataset
+            const id = e.target.dataset.id;
+            
+    
+            
+            // Handle product deletion
+            if (e.target.classList.contains("delete")) {
+                console.log(e.target.dataset.id);
+                console.log(e.target);
+    
+                // Send DELETE request to the backend
+                fetch(`/wishlist/delete/${id}`, { method: "DELETE" })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Remove the cart item from the DOM
+                            const cartItem = e.target.closest(".cart-item");
+                            if (cartItem) {
+                                cartItem.remove();
+                            }
+    
+                            // Update the order summary
+                            const totalElement = document.querySelector(".order-summary .summary-item strong");
+                           
+                            if (totalElement) {
+                                totalElement.textContent = `PKR ${data.newTotal.toFixed(2)}`;
+                            }
+                            window.location.reload();
+                        } else {
+                            console.error(data.message || "Failed to delete item");
+                            alert(data.message || "Error deleting the product.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                        alert("An error occurred while deleting the product.");
+                    });
+            }
+        });
+    </script> -->
+    <script>
+        // Select all delete icons
+        document.querySelectorAll('.delete-icon').forEach((icon) => {
+            icon.addEventListener('click', function () {
+                // Get the product ID from the data-id attribute
+                const productId = this.getAttribute('data-id');
+    
+                // Confirm before deleting
+                if (!confirm('Are you sure you want to remove this item from your wishlist?')) return;
+    
+                // Send a DELETE request to the server
+                fetch(`/wishlist/delete/${productId}`, {
+                    method: 'DELETE',
+                })
+                    .then((response) => {
+                        if (response.ok) {
+                            // Remove the item from the DOM
+                            this.closest('.wishlist-item').remove();
+                            alert('Product removed from your wishlist.');
+                        } else {
+                            alert('Failed to remove the product. Please try again.');
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                        alert('An error occurred. Please try again.');
+                    });
+            });
+        });
+    </script>
+    
+    
+</body>
+</html>

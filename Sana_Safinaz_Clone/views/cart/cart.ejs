@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart</title>
+    <link rel="stylesheet" href="/css/cart-style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Cart Section -->
+        <div class="cart-layout">
+            <div class="cart-section">
+                <div class="cart-header">YOUR BAG</div>
+                <% if (cart.length === 0) { %>
+                    <p>Your cart is empty.</p>
+                <% } else { %>
+                    <% cart.forEach(item => { %>
+                        <!-- Cart Item -->
+                        <div class="cart-item" data-id="<%= item.id %>">
+                            <img src="<%= item.image %>" alt="Product Image">
+                            <div class="cart-item-details">
+                                <h4><%= item.name %></h4>
+                                <p>Price: Rs<%= item.price %></p>
+                            </div>
+                            <div class="cart-item-actions">
+                                <div class="quantity-controls">
+                                    <button class="decrease" data-id="<%= item.id %>">-</button>
+                                    <span><%= item.quantity %></span>
+                                    <button class="increase" data-id="<%= item.id %>">+</button>
+                                </div>
+                                <div class="icons">
+                                    <i class="delete" data-id="<%= item.id %>">🗑️</i>
+                                </div>
+                            </div>
+                        </div>
+                    <% }); %>
+                <% } %>
+            </div>
+
+            <!-- Order Summary -->
+            <% if (cart.length > 0) { %>
+                <div class="order-summary">
+                    <div class="order-summary-header">ORDER SUMMARY</div>
+                    <div class="summary-item">
+                        <span>Subtotal</span>
+                        <strong id="subtotal">PKR <%= totalPrice.toFixed(2) %></strong>
+                    </div>
+                    <div class="summary-item">
+                        <span>Shipping (Local - Shipping)</span>
+                        <strong>PKR 190.00</strong>
+                    </div>
+                    <hr>
+                    <% const orderTotal = totalPrice + 190.0; %>
+                    <div class="summary-item">
+                        <span>Order Total</span>
+                        <strong id="order-total">PKR <%= orderTotal.toFixed(2) %></strong>
+                    </div>
+                    <a href="/cart/checkout" class = "checkout-btn">PROCEED TO CHECKOUT</a>
+                    
+                </div>
+                
+            <% } %>
+        </div>
+    </div>
+
+    <script>
+        // Handle quantity increase/decrease and delete actions
+        document.addEventListener("click", function (e) {
+            // Get the product ID from the dataset
+            const id = e.target.dataset.id;
+            
+    
+            // Handle quantity increase/decrease
+            if (e.target.classList.contains("increase") || e.target.classList.contains("decrease")) {
+                const action = e.target.classList.contains("increase") ? "increase" : "decrease";
+    
+                // Send AJAX request to update cart quantity
+                fetch(`/cart/update/${id}/${action}`, { method: "POST" })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            window.location.reload(); // Reload the page to reflect changes
+                        }
+                    })
+                    .catch(error => console.error("Error updating quantity:", error));
+            }
+    
+            // Handle product deletion
+            if (e.target.classList.contains("delete")) {
+                console.log(e.target.dataset.id);
+                console.log(e.target);
+    
+                // Send DELETE request to the backend
+                fetch(`/cart/delete/${id}`, { method: "DELETE" })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Remove the cart item from the DOM
+                            const cartItem = e.target.closest(".cart-item");
+                            if (cartItem) {
+                                cartItem.remove();
+                            }
+    
+                            // Update the order summary
+                            const totalElement = document.querySelector(".order-summary .summary-item strong");
+                           
+                            if (totalElement) {
+                                totalElement.textContent = `PKR ${data.newTotal.toFixed(2)}`;
+                            }
+                            window.location.reload();
+                        } else {
+                            console.error(data.message || "Failed to delete item");
+                            alert(data.message || "Error deleting the product.");
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                        alert("An error occurred while deleting the product.");
+                    });
+            }
+        });
+    </script>
+    
+</body>
+</html>

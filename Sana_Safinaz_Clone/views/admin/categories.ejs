@@ -1,0 +1,30 @@
+<div class="content">
+    <div class="admin-header">
+        <h1>Categories</h1>
+        <a href="/admin/categories/add" class="btn-primary">Add Category</a>
+    </div>
+
+    <div class="section">
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Category Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% categories.forEach(function(category) { %>
+                    <tr>
+                        <td><%= category.name %></td>
+                        <td>
+                            <a href="/admin/categories/edit/<%= category.id %>" class="btn btn-warning btn-sm">Edit</a>
+                            <a href="/admin/categories/delete/<%= category.id %>" class="btn btn-danger btn-sm">Delete</a>
+                        </td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+

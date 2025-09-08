@@ -1,0 +1,39 @@
+<div class="content">
+    <div class="admin-header">
+        <h1>Edit Product</h1>
+    </div>
+
+    <div class="section">
+        <% console.log("product:" + product); console.log(categories)%>
+        <form action="/admin/products/edit/<%= product._id %>" method="POST"
+            <div class="form-group">
+                <label for="productName">Product Name</label>
+                <input type="text" id="productName" name="name" value="<%= product.name %>" required>
+            </div>
+
+            <div class="form-group">
+                <label for="productPrice">Price</label>
+                <input type="number" id="productPrice" name="price" step="0.01" value="<%= product.price %>" required>
+            </div>
+
+            <div class="form-group">
+                <label for="productCategory">Category</label>
+                <select id="productCategory" name="category" required>
+                    <% categories.forEach(function(category) { %>
+                        <option value="<%= category._id %>" <%= (category._id.toString() === product.category._id.toString()) ? 'selected' : '' %>><%= category.name %></option>
+                    <% }) %>
+                    <% if (!product.category || !categories.some(cat => cat._id.toString() === product.category._id.toString())) { %>
+                        <option value="<%= categories[0]._id %>" selected><%= categories[0].name %></option>
+                    <% } %>
+                </select>
+
+            <div class="form-group">
+                <label for="productImage">Product Image</label>
+                <input type="file" id="productImage" name="image">
+                <img src="<%= product.image %>" alt="Product Image" style="width: 100px; height: auto; margin-top: 10px;">
+            </div>
+
+            <button type="submit" class="btn-primary">Save Changes</button>
+        </form>
+    </div>
+</div>

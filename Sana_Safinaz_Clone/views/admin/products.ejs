@@ -1,0 +1,125 @@
+
+    <div class="content">
+        <div class="admin-header">
+            <h1>Products</h1>
+            <a href="/admin/products/add" class="btn-primary">Add Product</a>
+        </div>
+        <% console.log(products[0].category.name); %>
+        <div class="p-5 shadow-lg rounded" style="background-color: #f9f9f9;">
+            <h5 class="text-center fw-bold text-secondary mb-4">Search & Filter Products</h5>
+            <form method="GET" action="/admin/products" class="d-flex flex-column gap-4">
+              <!-- Search Section -->
+              <div class="form-group">
+                <input
+                  type="text"
+                  name="search"
+                  id="search"
+                  class="form-control"
+                  placeholder="Search by product title..."
+                  value="<%= search %>"
+                  style="border-radius: 5px; border: 1px solid #ddd; padding: 10px;">
+                <button type="submit" class="btn btn-primary mt-2" style="padding: 10px 15px;">Search</button>
+              </div>
+          
+              <!-- Price Filter Section -->
+              <div class="form-group">
+                <label for="fromPrice" class="fw-bold text-secondary mb-2">Price Range:</label>
+                <div class="d-flex align-items-center">
+                  <input
+                    type="number"
+                    name="fromPrice"
+                    id="fromPrice"
+                    class="form-control me-2"
+                    placeholder="From"
+                    value="<%= fromPrice %>"
+                    style="width: 100px; border-radius: 5px; border: 1px solid #ddd; padding: 10px;">
+                  <span class="mx-2">to</span>
+                  <input
+                    type="number"
+                    name="toPrice"
+                    id="toPrice"
+                    class="form-control ms-2"
+                    placeholder="To"
+                    value="<%= toPrice %>"
+                    style="width: 100px; border-radius: 5px; border: 1px solid #ddd; padding: 10px;">
+                </div>
+              </div>
+          
+              <!-- Sort Section -->
+              <div class="form-group">
+                <label for="sort" class="fw-bold text-secondary mb-2">Sort by:</label>
+                <select
+                  name="sort"
+                  id="sort"
+                  class="form-select"
+                  style="border-radius: 5px; border: 1px solid #ddd; padding: 10px;">
+                  <option value="" <% if (!sort) { %>selected<% } %>>Sort by</option>
+                  <option value="price_asc" <% if (sort === 'price_asc') { %>selected<% } %>>Price: Low to High</option>
+                  <option value="price_desc" <% if (sort === 'price_desc') { %>selected<% } %>>Price: High to Low</option>
+                </select>
+              </div>
+            </form>
+          </div>
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+
+    <div class="container mt-5">
+        
+        <!-- Product Grid -->
+        <div class="row">
+            <% products.forEach(product => { %>
+                <div class="col-md-3 col-sm-6 mb-4">
+                    <div class="card">
+                        <img src="<%= product.image || 'https://via.placeholder.com/150' %>" 
+                             class="card-img-top" 
+                             alt="<%= product.name %>">
+                        <div class="card-body">
+                            <h5 class="card-title text-center"><%= product.name %></h5>
+                            <p class="card-text fw-bold text-center"><b>Rs <%= product.price.toFixed(2) %></b></p>
+                            <p class="card-text text-center">Category: <%= product.category.name %></p>
+                            <a href="/admin/products/edit/<%= product.id %>" class="tn btn-primary">Edit</a>
+                            <a href="/admin/products/delete/<%= product.id %>" class="btn btn-danger">Delete</a>
+                        </div>
+                     
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+
+        <!-- Pagination -->
+        <nav aria-label="Page navigation example" class="d-flex justify-content-center mt-4">
+            <ul class="pagination">
+                <!-- Previous Button -->
+                <li class="page-item <%= page === 1 ? 'disabled' : '' %>">
+                    <a class="page-link" href="/admin/products/<%= page - 1 %>" aria-label="Previous">
+                        <span aria-hidden="true">&laquo; Previous</span>
+                    </a>
+                </li>
+
+                <!-- Page Numbers -->
+                <% for (let i = 1; i <= totalPages; i++) { %>
+                    <li class="page-item <%= i === page ? 'active' : '' %>">
+                        <a class="page-link" href="/admin/products/<%= i %>"><%= i %></a>
+                    </li>
+                <% } %>
+
+                <!-- Next Button -->
+                <li class="page-item <%= page === totalPages ? 'disabled' : '' %>">
+                    <a class="page-link" href="/admin/products/<%= page + 1 %>" aria-label="Next">
+                        <span aria-hidden="true">Next &raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+

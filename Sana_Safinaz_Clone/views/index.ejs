@@ -1,0 +1,47 @@
+<img src="/images/main_backImg.webp" class="w-100" alt="Main Home Image">
+        <h1 class="text-center text-black fw-bolder p-3 fs-2">Home</h1>
+        <div class="container-fluid p-4">
+            <div class="row row-cols-lg-4 row-cols-md-3 row-cols-2 d-flex justify-content-center">
+                <% products.forEach((product) => { %>
+                    <div class="col imgs">
+                        <a href="" class="text-decoration-none text-black">
+                            <div>
+                                <img class = "img-fluid" src="<%= product.image %>" alt="<%= product.title %>">
+                            </div>
+                           <!-- Add to Bag Button -->
+                           <div class="add-to-bag-btn bg-black text-white text-center py-2">
+                            <a href="/cart/add/<%= product._id %>" class="text-white text-decoration-none">
+                              <i class="fas fa-shopping-bag"></i> ADD TO CART
+                            </a>
+                          </div>
+                          
+                          <!-- Add to Wishlist Button -->
+                          <div class="add-to-wishlist-btn bg-white text-black text-center py-2 border">
+                            <a href="/wishlist/add/<%= product._id %>" class="text-black text-decoration-none">
+                              <i class="fas fa-heart"></i> ADD TO WISHLIST
+                            </a>
+                          </div>
+                            <div class="pt-2 pb-3" style = "height:60px">
+                                <%= product.title %>
+                            </div>
+                            <div class="pb-3 fw-bold">
+                                <%= priceFormat(product.price) %>
+                            </div>
+                        </a>
+                    </div>
+                <% }) %>
+              
+                
+                
+              
+               
+             
+            </div>
+        </div>
+
+
+   
+    
+
+
+  

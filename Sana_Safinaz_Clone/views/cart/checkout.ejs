@@ -1,0 +1,108 @@
+<style>
+    /* General Reset */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+}
+
+/* Checkout Container */
+.checkout-container {
+    max-width: 600px;
+    margin: 50px auto;
+    background: #ffffff;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.checkout-container h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Form Styles */
+.checkout-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group select {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    outline: none;
+}
+
+.form-group input:read-only {
+    background-color: #f5f5f5;
+    color: #888;
+    cursor: not-allowed;
+}
+
+/* Button Styles */
+.checkout-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease;
+}
+
+.checkout-btn:hover {
+    background-color: #45a049;
+}
+
+</style>
+
+
+
+<div class="checkout-container">
+    <h2>Checkout</h2>
+    <form id="checkoutForm" class="checkout-form"action="/cart/checkout" method="POST">
+        <div class="form-group">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" name="name" value="<%= user.name %>" readonly>
+        </div>
+        <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" value="<%= user.email %>" readonly>
+        </div>
+        <div class="form-group">
+            <label for="address">Shipping Address</label>
+            <input type="text" id="address" name="shippingAddress" placeholder="Enter your address" required>
+        </div>
+        <div class="form-group">
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required>
+        </div>
+        <div class="form-group">
+            <label for="payment">Payment Method</label>
+            <select id="payment" name="payment" required>
+                <option value="cash">Pay with Cash</option>
+            </select>
+        </div>
+        <button type="submit" class="checkout-btn">Confirm Order</button>
+    </form>
+</div>
