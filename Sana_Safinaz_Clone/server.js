@@ -1,5 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const path = require("path");
+require('dotenv').config();
+const dns = require('dns');
 const expressLayouts = require("express-ejs-layouts");
 const homeProduct = require('./models/homeProducts');
 const User = require("./models/User");
@@ -14,9 +17,12 @@ let cookieParser = require("cookie-parser");
 const app = express();
 app.use(cookieParser());
 
+// Ensure Node resolves SRV (mongodb+srv) records using public DNS
+dns.setServers(['8.8.8.8', '8.8.4.4']);
+
 app.use(
     session({
-        secret: "your_secret_key",
+        secret: process.env.SESSION_SECRET || "default_secret_key", // Use a secret key from .env or a default
         resave: false, // Prevents resaving session if it wasn’t modified
         saveUninitialized: true, // Saves uninitialized sessions
     })
@@ -40,17 +46,19 @@ app.get("/show-flash", (req, res) => {
 
 
 
-mongoose.connect("mongodb://localhost/sana_safinaz")
+const mongoUri = process.env.MONGO_URI;
+if (!mongoUri) console.warn('Warning: MONGO_URI not set in .env — using default from code');
+mongoose.connect(mongoUri )
     .then(() => console.log("Connected to MongoDB"))
     .catch((err) => console.error("MongoDB connection error:", err));
 
 
 app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies
 app.use(express.json()); // Parse JSON bodies
-app.use(express.static( "public")); // Serve static files
+app.use(express.static(path.join(__dirname, "public"))); // Serve static files
 
 
-app.use(expressLayouts); // Enable layouts
+app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 function priceFormat(price) {
     return new Intl.NumberFormat('en-PK', {
@@ -184,3 +192,4 @@ const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}`);
 });
+module.exports = app;
