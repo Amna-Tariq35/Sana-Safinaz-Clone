@@ -1,108 +1,256 @@
 <style>
     /* General Reset */
-body {
-    font-family: Arial, sans-serif;
-    line-height: 1.6;
-    margin: 0;
-    padding: 0;
-    background-color: #f9f9f9;
-}
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
 
-/* Checkout Container */
-.checkout-container {
-    max-width: 600px;
-    margin: 50px auto;
-    background: #ffffff;
-    padding: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-}
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        background: #f5f5f5;
+        padding: 20px;
+    }
 
-.checkout-container h2 {
-    text-align: center;
-    color: #333;
-    margin-bottom: 20px;
-}
+    /* Checkout Container */
+    .checkout-container {
+        max-width: 700px;
+        margin: 50px auto;
+        background: #ffffff;
+        padding: 40px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        border-radius: 4px;
+    }
 
-/* Form Styles */
-.checkout-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
+    .checkout-container h2 {
+        text-align: center;
+        color: #000;
+        margin-bottom: 10px;
+        font-size: 28px;
+        font-weight: 700;
+        letter-spacing: 2px;
+    }
 
-.form-group {
-    display: flex;
-    flex-direction: column;
-}
+    .user-status {
+        text-align: center;
+        font-size: 13px;
+        color: #666;
+        margin-bottom: 30px;
+        padding: 12px;
+        background: #f9f9f9;
+        border-radius: 3px;
+        border-left: 3px solid #000;
+    }
 
-.form-group label {
-    font-size: 14px;
-    color: #555;
-    margin-bottom: 5px;
-}
+    .user-status.guest {
+        background: #f0f0f0;
+    }
 
-.form-group input,
-.form-group select {
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    outline: none;
-}
+    .user-status a {
+        color: #000;
+        text-decoration: none;
+        font-weight: 600;
+    }
 
-.form-group input:read-only {
-    background-color: #f5f5f5;
-    color: #888;
-    cursor: not-allowed;
-}
+    .user-status a:hover {
+        text-decoration: underline;
+    }
 
-/* Button Styles */
-.checkout-btn {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 12px;
-    font-size: 16px;
-    border-radius: 4px;
-    cursor: pointer;
-    text-transform: uppercase;
-    transition: background-color 0.3s ease;
-}
+    /* Form Styles */
+    .checkout-form {
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+    }
 
-.checkout-btn:hover {
-    background-color: #45a049;
-}
+    .form-section {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+        padding: 20px;
+        background: #fafafa;
+        border-radius: 3px;
+        border-left: 4px solid #000;
+    }
+
+    .form-section h3 {
+        color: #000;
+        font-size: 15px;
+        margin-bottom: 5px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group label {
+        font-size: 13px;
+        color: #333;
+        margin-bottom: 6px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .form-group input,
+    .form-group select {
+        padding: 12px;
+        font-size: 14px;
+        border: 1px solid #ddd;
+        border-radius: 3px;
+        outline: none;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+        border-color: #000;
+        box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group input:read-only {
+        background-color: #e8e8e8;
+        color: #666;
+        cursor: not-allowed;
+        font-weight: 500;
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+    }
+
+    @media (max-width: 600px) {
+        .form-row {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    /* Button Styles */
+    .checkout-btn {
+        background: #000;
+        color: white;
+        border: none;
+        padding: 15px;
+        font-size: 15px;
+        border-radius: 3px;
+        cursor: pointer;
+        text-transform: uppercase;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        transition: all 0.3s ease;
+        margin-top: 10px;
+    }
+
+    .checkout-btn:hover {
+        background: #333;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .checkout-btn:active {
+        transform: translateY(1px);
+    }
+
+    .login-link {
+        text-align: center;
+        margin-top: 25px;
+        font-size: 13px;
+        color: #666;
+    }
+
+    .login-link a {
+        color: #000;
+        text-decoration: none;
+        font-weight: 700;
+    }
+
+    .login-link a:hover {
+        text-decoration: underline;
+    }
 
 </style>
 
-
-
 <div class="checkout-container">
-    <h2>Checkout</h2>
-    <form id="checkoutForm" class="checkout-form"action="/cart/checkout" method="POST">
-        <div class="form-group">
-            <label for="name">Full Name</label>
-            <input type="text" id="name" name="name" value="<%= user.name %>" readonly>
+    <h2>CHECKOUT</h2>
+    
+    <% if (user) { %>
+        <div class="user-status">
+            ✓ Logged in as <strong><%= user.name %></strong> | <a href="/logout">Logout</a>
         </div>
-        <div class="form-group">
-            <label for="email">Email Address</label>
-            <input type="email" id="email" name="email" value="<%= user.email %>" readonly>
+    <% } else { %>
+        <div class="user-status guest">
+            👤 Checking out as Guest | <a href="/auth/login">Login to your account</a>
         </div>
-        <div class="form-group">
-            <label for="address">Shipping Address</label>
-            <input type="text" id="address" name="shippingAddress" placeholder="Enter your address" required>
+    <% } %>
+
+    <form id="checkoutForm" class="checkout-form" action="/cart/checkout" method="POST">
+        
+        <!-- Customer Information Section -->
+        <div class="form-section">
+            <h3>📋 Customer Information</h3>
+            
+            <% if (user) { %>
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" value="<%= user.name %>" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" value="<%= user.email %>" readonly>
+                </div>
+            <% } else { %>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name">Full Name *</label>
+                        <input type="text" id="name" name="name" placeholder="John Doe" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address *</label>
+                        <input type="email" id="email" name="email" placeholder="john@example.com" required>
+                    </div>
+                </div>
+            <% } %>
         </div>
-        <div class="form-group">
-            <label for="phone">Phone Number</label>
-            <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required>
+
+        <!-- Shipping Information Section -->
+        <div class="form-section">
+            <h3>📦 Shipping Information</h3>
+            
+            <div class="form-group">
+                <label for="address">Shipping Address *</label>
+                <input type="text" id="address" name="shippingAddress" placeholder="Enter your complete address" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="phone">Phone Number *</label>
+                <input type="tel" id="phone" name="phone" placeholder="03001234567" required>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="payment">Payment Method</label>
-            <select id="payment" name="payment" required>
-                <option value="cash">Pay with Cash</option>
-            </select>
+
+        <!-- Payment Section -->
+        <div class="form-section">
+            <h3>💳 Payment Method</h3>
+            
+            <div class="form-group">
+                <label for="payment">Select Payment Method *</label>
+                <select id="payment" name="payment" required>
+                    <option value="cash" selected>💵 Cash on Delivery (COD)</option>
+                </select>
+            </div>
         </div>
-        <button type="submit" class="checkout-btn">Confirm Order</button>
+
+        <button type="submit" class="checkout-btn">✓ CONFIRM ORDER</button>
     </form>
+
+    <% if (!user) { %>
+        <div class="login-link">
+            Have an account? <a href="/auth/login">LOGIN HERE</a> to save your information
+        </div>
+    <% } %>
 </div>

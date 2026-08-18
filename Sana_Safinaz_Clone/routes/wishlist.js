@@ -6,13 +6,22 @@ const User = require("../models/User");
 
 router.get("/", async (req, res) => {
     try {
+        // Check if user is logged in
+        if (!req.session.user) {
+            return res.render("wishlist", {
+                message: "Please log in to view your wishlist.",
+                products: [],
+                isLoggedIn: false
+            });
+        }
     
         // Find the logged-in user
         const user = await User.findById(req.session.user._id).populate("wishlist");
         if (!user) {
             return res.status(404).render("wishlist", {
                 message: "User not found.",
-                products: []
+                products: [],
+                isLoggedIn: false
             });
         }
 
@@ -21,13 +30,15 @@ router.get("/", async (req, res) => {
 
         res.render("wishlist", {
             message: products.length > 0 ? null : "Your wishlist is empty.",
-            products
+            products,
+            isLoggedIn: true
         });
     } catch (error) {
         console.error("Error fetching wishlist:", error);
         res.status(500).render("wishlist", {
             message: "Server error.",
-            products: []
+            products: [],
+            isLoggedIn: false
         });
     }
 });

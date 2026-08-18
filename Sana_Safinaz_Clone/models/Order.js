@@ -6,7 +6,15 @@ const orderSchema = new mongoose.Schema(
         user: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User", // Reference to the User model
-            required: true,
+            required: false, // Optional for guest orders
+        },
+        guestName: {
+            type: String,
+            required: false, // Only for guest checkout
+        },
+        guestEmail: {
+            type: String,
+            required: false, // Only for guest checkout
         },
         items: [
             {

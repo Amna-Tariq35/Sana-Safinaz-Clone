@@ -52,44 +52,50 @@ router.get("/", (req, res) => {
     res.render("cart/cart", { cart, totalPrice });
 });
 router.get("/checkout", (req, res) => {
-    res.render("cart/checkout", { user: req.session.user });
+    const user = req.session.user || null;
+    res.render("cart/checkout", { user });
 });
 
 
 router.post("/checkout", async (req, res) => {
     try {
-        const { shippingAddress, phone } = req.body;
-
-        // Assuming req.session.cart contains cart items and user is logged in
+        const { shippingAddress, phone, name, email } = req.body;
         const cart = req.session.cart || [];
-        const userId = req.session.user._id;
+        const user = req.session.user;
 
-        const orderTotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
+        // Validate cart
         if (cart.length === 0) {
             return res.status(400).send("Your cart is empty");
         }
-        console.log("Cart 1" + cart[0]);
+
+        const orderTotal = cart.reduce((total, item) => total + item.price * item.quantity, 0);
 
         const orderItems = cart.map(item => ({
-
-            productId: item.id, // Ensure this exists in the cart data
+            productId: item.id,
             name: item.name,
             quantity: item.quantity,
             price: item.price,
         }));
-        orderItems.forEach(element => {
-            console.log(element);
-        });
 
-
-        const newOrder = new Order({
-            user: userId,
+        // Create order with user info (logged-in) or guest info
+        const orderData = {
             items: orderItems,
             shippingAddress,
             phone,
-            orderTotal: orderTotal + 190,
-        });
+            orderTotal: orderTotal + 190, // Add delivery charges
+            paymentMethod: "cash",
+        };
 
+        // If user is logged in, add user ID
+        if (user && user._id) {
+            orderData.user = user._id;
+        } else {
+            // For guest orders, store guest name and email
+            orderData.guestName = name || "Guest";
+            orderData.guestEmail = email || "guest@example.com";
+        }
+
+        const newOrder = new Order(orderData);
         await newOrder.save();
 
         // Clear the cart

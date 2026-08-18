@@ -31,6 +31,7 @@ app.use(flash());
 app.use((req, res, next) => {
     res.locals.success_msg = req.flash('success_msg');
     res.locals.error_msg = req.flash('error_msg');
+    res.locals.user = req.session.user || null; // Make user available to all views
     next();
 });
 app.get("/test-flash", (req, res) => {
@@ -184,9 +185,9 @@ app.get("/logout", async (req, res) => {
 const adminRoutes = require("./routes/admin");
 app.use("/admin",[authMiddleware,adminMiddleware], adminRoutes);
 const cartRoutes = require("./routes/cart");
-app.use("/cart",[authMiddleware,isAdmin], cartRoutes);
+app.use("/cart", cartRoutes); // Allow guest users
 const wishRoutes = require("./routes/wishlist");
-app.use("/wishlist",[authMiddleware,isAdmin], wishRoutes);
+app.use("/wishlist", wishRoutes); // Allow guest users
 
 // Server Setup
 const PORT = 3000;
